@@ -9,6 +9,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
 import { useRouter } from "next/navigation";
 
+import { createUser } from "../firebase/admim/write";
+
 const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
@@ -39,15 +41,27 @@ export default function AuthContextProvider({ children }) {
   }, [user, router]); // Redirect only when user state changes
 
   const handleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
     setIsLoading(true);
+    
     try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
-      // Redirection handled in useEffect
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      console.log("User signed in:", user); 
+      // Create or update user document in Firestore
+      await createUser({
+        uid: user.uid, // Correctly use uid here
+      });
+      console.log("User document created/updated"); 
+      // Redirect to the admin page (if applicable)
+      router.push('/admin');
     } catch (error) {
       setError(error?.message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
+  
 
   const handleLogout = async () => {
     setIsLoading(true);

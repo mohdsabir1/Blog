@@ -1,23 +1,20 @@
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {getStorage} from "firebase/storage";
+import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore"; 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCuMAadP_ff6mXFFePIiCKJYXRNv0eD0s4",
-  authDomain: "blog-47482.firebaseapp.com",
-  projectId: "blog-47482",
-  storageBucket: "blog-47482.appspot.com",
-  messagingSenderId: "385868054390",
-  appId: "1:385868054390:web:6676f36fa810897f350457",
-  measurementId: "G-LZKPE098Z4"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
 };
-
 
 const app = initializeApp(firebaseConfig);
 
-
-export const auth = getAuth()
-export const db  = getFirestore()
-export const storage = getStorage()
+export const auth = getAuth(app);  // Pass app instance here
+export const db = getFirestore(app);  // Pass app instance here
+export const storage = getStorage(app);  // Pass app instance here

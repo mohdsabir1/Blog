@@ -1,4 +1,4 @@
-import { getAllCategories } from "@/lib/firebase/category/readFromServer";
+import { getAllCategories } from "@/lib/firebase/category/readToShowFronend";
 import React from "react";
 import Link from "next/link";
 export default async function CategoriesPage() {

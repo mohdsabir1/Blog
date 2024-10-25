@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePostForm } from "./contexts/PostFormContext";
-import { useCategories } from "@/lib/firebase/category/read";
-import { useAuthor } from "@/lib/firebase/author/read";
+import { useCategories } from "@/lib/firebase/category/CategoryRead";
+import { useAuthor } from "@/lib/firebase/author/AuthorRead";
 import RTEFields from "./components/RTEFields";
 
 export default function PostForm() {

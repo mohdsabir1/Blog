@@ -47,12 +47,15 @@ export default function AuthContextProvider({ children }) {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log("User signed in:", user); 
+      console.log("User signed in:", user.email); 
       // Create or update user document in Firestore
       await createUser({
-        uid: user.uid, // Correctly use uid here
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
       });
-      console.log("User document created/updated"); 
+      console.log("User document created/updated",user.email); 
       // Redirect to the admin page (if applicable)
       router.push('/admin');
     } catch (error) {

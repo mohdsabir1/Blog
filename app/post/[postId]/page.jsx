@@ -1,5 +1,5 @@
 import { getAllAuthor } from "@/lib/firebase/author/readFromServer";
-import { getAllCategory } from "@/lib/firebase/category/readFromServer";
+import { getAllCategory } from "@/lib/firebase/category/readToShowFronend";
 import { getPost } from "@/lib/firebase/post/readFromServer";
 import React from "react";
 export async function generateMetadata({ params }) {

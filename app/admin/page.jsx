@@ -1,11 +1,16 @@
+'use client'
 import React from "react";
 import CountCard from "./components/CountCard";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { CiBag1 } from "react-icons/ci";
 import Link from "next/link";
+import { useAuth } from "@/lib/context/AuthContext";
 
 export default function HomePage() {
+  const { user } = useAuth(); // Retrieve the current user
+  const userId = user?.uid; // User ID of the currently logged-in user
+  console.log(userId)
   const Data = [
     {
       id: 1,
@@ -50,7 +55,7 @@ export default function HomePage() {
       {Data.map(data => (
         <Link key={data.id} href={data.link} passHref legacyBehavior>
        
-            <CountCard name={data.name} path={data.path} icon={data.icon} />
+            <CountCard name={data.name} path={data.path} icon={data.icon} userId={userId} />
       
         </Link>
       ))}

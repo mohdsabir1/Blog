@@ -1,20 +1,26 @@
 "use client";
-import { getCategories } from "@/lib/firebase/category/read";
+import { useAuth } from "@/lib/context/AuthContext";
+import { getCategories } from "@/lib/firebase/category/CategoryRead";
 import {
   createCategory,
   deleteCategory,
   updateCategory,
-} from "@/lib/firebase/category/write";
-import { useRouter, useSearchParams } from "next/navigation";
+} from "@/lib/firebase/category/CategoryWrite";
+import { useRouter } from "next/navigation";
 import React, { useState, createContext, useContext } from "react";
 
 const CategoryForm = createContext();
 
 export default function CatFormContext({ children }) {
+  const { user } = useAuth();
+  const userId = user?.uid;
   const router = useRouter();
+  
   const [data, setData] = useState({
     name: "",
     slug: "",
+    iconURL: "",
+    id: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,18 +34,33 @@ export default function CatFormContext({ children }) {
     }));
   };
 
+  const resetForm = () => {
+    setData({
+      name: "",
+      slug: "",
+      iconURL: "",
+      id: "",
+    });
+    setImage(null);
+    setError(null);
+    setIsDone(false);
+  };
+
   const handleCreate = async (e) => {
     e?.preventDefault();
+    if (!userId) {
+      setError("You must be logged in to create a category");
+      return;
+    }
+
     setError(null);
     setLoading(true);
     setIsDone(false);
 
     try {
-      await createCategory({ data, image });
+      await createCategory({ userId, data, image });
       setIsDone(true);
-      // Reset form after successful creation
-      setData({ name: "", slug: "" });
-      setImage(null);
+      resetForm();
       router.push("/admin/categories");
     } catch (error) {
       setError(error?.message || "An error occurred");
@@ -48,17 +69,21 @@ export default function CatFormContext({ children }) {
     }
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (e) => {
+    e?.preventDefault();
+    if (!userId) {
+      setError("You must be logged in to update a category");
+      return;
+    }
+
     setError(null);
     setLoading(true);
     setIsDone(false);
 
     try {
-      await updateCategory({ data, image });
+      await updateCategory({ userId, data, image });
       setIsDone(true);
-      // Reset form after successful creation
-      setData({ name: "", slug: "" });
-      setImage(null);
+      resetForm();
       router.push("/admin/categories");
     } catch (error) {
       setError(error?.message || "An error occurred");
@@ -66,35 +91,50 @@ export default function CatFormContext({ children }) {
       setLoading(false);
     }
   };
+
   const handleDelete = async (id) => {
+    if (!userId) {
+      setError("You must be logged in to delete a category");
+      return;
+    }
+
     setError(null);
     setLoading(true);
     setIsDone(false);
 
     try {
-      await deleteCategory(id);
-      router.push("/admin/categories");
-      setLoading(false);
+      await deleteCategory({ userId, id });
       setIsDone(true);
+      router.push("/admin/categories");
     } catch (error) {
       setError(error?.message || "An error occurred");
     } finally {
       setLoading(false);
-      setError(error?.message);
     }
   };
 
   const fetchData = async (id) => {
     setError(null);
+    setLoading(true);
 
     try {
-      const res = await getCategories(id);
-      if (res.exists()) {
-        setData(res.data());
+      const docSnapshot = await getCategories(id);
+      if (docSnapshot.exists()) {
+        const categoryData = docSnapshot.data();
+        setData({
+          id: categoryData.id,
+          name: categoryData.name,
+          slug: categoryData.slug,
+          iconURL: categoryData.iconURL,
+        });
       } else {
-        throw new Error("can't fetch categories");
+        throw new Error("Category not found");
       }
-    } catch (error) {}
+    } catch (error) {
+      setError(error?.message || "Failed to fetch category");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -121,9 +161,7 @@ export default function CatFormContext({ children }) {
 export const useCategoryForm = () => {
   const context = useContext(CategoryForm);
   if (!context) {
-    throw new Error(
-      "useCategoryForm must be used within a CategoryFormProvider"
-    );
+    throw new Error("useCategoryForm must be used within a CategoryFormProvider");
   }
   return context;
 };

@@ -1,5 +1,5 @@
 import { PostCard } from "@/app/components/FetchPosts";
-import { getAllCategory } from "@/lib/firebase/category/readFromServer";
+import { getAllCategory } from "@/lib/firebase/category/readToShowFronend";
 import { getALlPostByCategory } from "@/lib/firebase/post/readFromServer";
 import Link from "next/link";
 import React from "react";

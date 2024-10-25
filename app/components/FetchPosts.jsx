@@ -1,5 +1,5 @@
 import { getAllAuthor } from "@/lib/firebase/author/readFromServer";
-import { getAllCategory } from "@/lib/firebase/category/readFromServer";
+import { getAllCategory } from "@/lib/firebase/category/readToShowFronend";
 import { getALlPost } from "@/lib/firebase/post/readFromServer";
 import Link from "next/link";
 import React from "react";

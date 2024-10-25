@@ -1,6 +1,6 @@
 
 "use client";
-import { useCategories } from "@/lib/firebase/category/read";
+import { useCategories } from "@/lib/firebase/category/CategoryRead";
 import Link from "next/link";
 import React from "react";
 

@@ -2,7 +2,7 @@ import { db, storage } from "@/lib/firebase";
 import { Timestamp, setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-export const createCategory = async ({ data, image }) => {
+export const createPost = async ({ userId,data, image }) => {
   if (!data?.name?.trim()) {
     throw new Error("Name is required");
   }
@@ -14,54 +14,55 @@ export const createCategory = async ({ data, image }) => {
   }
 
   try {
-    const imageRef = ref(storage, `categories/${data.slug}`);
+    const imageRef = ref(storage, `posts/${data.slug}`);
     await uploadBytes(imageRef, image);
     const imageUrl = await getDownloadURL(imageRef);
 
-    const fireStoreRef = doc(db, `categories/${data.slug}`);
+    const fireStoreRef = doc(db, `posts/${data.slug}`);
     await setDoc(fireStoreRef, {
       ...data,
       id: data.slug,
-      iconURL: imageUrl,
+      imageURL: imageUrl,
+      userId,
       timestamp: Timestamp.now(),
     });
   } catch (error) {
-    throw new Error(`Failed to create category: ${error.message}`);
+    throw new Error(`Failed to create post: ${error.message}`);
   }
 };
 
-export const updateCategory = async ({ data, image }) => {
+export const updatePost = async ({ data, image }) => {
   if (!data?.name?.trim()) {
     throw new Error("Name is required");
   }
   if (!data?.slug?.trim()) {
     throw new Error("Slug is required");
   }
-  var imageUrl = data.iconURL;
+  var imageUrl = data.imageURL;
   if (image) {
-    const imageRef = ref(storage, `categories/${data.slug}`);
+    const imageRef = ref(storage, `posts/${data.slug}`);
     await uploadBytes(imageRef, image);
     imageUrl = await getDownloadURL(imageRef);
   }
 
   try {
-    const fireStoreRef = doc(db, `categories/${data.id}`);
+    const fireStoreRef = doc(db, `posts/${data.id}`);
     await updateDoc(fireStoreRef, {
       ...data,
-      iconURL: imageUrl,
+      imageURL: imageUrl,
       timestamp: Timestamp.now(),
     });
   } catch (error) {
-    throw new Error(`Failed to create category: ${error.message}`);
+    throw new Error(`Failed to create Post: ${error.message}`);
   }
 };
 
-export const deleteCategory = async (id) => {
+export const deletePost = async (id) => {
 if(!id)
 {
   throw new Error("Id is required");
 
 }
 
-await deleteDoc(doc(db,`categories/${id}`));
+await deleteDoc(doc(db,`posts/${id}`));
 }

@@ -2,8 +2,8 @@
 import useCollectionCount from "@/lib/firebase/count";
 import React from "react";
 
-export default function CountCard({ path, name, icon }) {
-  const { data, error, isLoading } = useCollectionCount({ path, name, icon });
+export default function CountCard({ userId,path, name, icon }) {
+  const { data, error, isLoading } = useCollectionCount({ userId, path, name, icon });
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error...</p>;
 

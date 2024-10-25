@@ -1,6 +1,6 @@
 'use client'
 
-import { usePosts } from "@/lib/firebase/post/read"
+import { usePosts } from "@/lib/firebase/post/PostRead"
 import Link from "next/link"
 import React from "react"
 

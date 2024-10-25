@@ -1,14 +1,17 @@
 "use client";
 
 
-import { getAuthor } from "@/lib/firebase/author/read";
-import { createAuthor, deleteAuthor, updateAuthor } from "@/lib/firebase/author/write";
+import { useAuth } from "@/lib/context/AuthContext";
+import { getAuthor } from "@/lib/firebase/author/AuthorRead";
+import { createAuthor, deleteAuthor, updateAuthor } from "@/lib/firebase/author/AuthorWrite";
 import { useRouter } from "next/navigation";
 import React, { useState, createContext, useContext } from "react";
 
 const AuthorFormContext = createContext();
 
 export default function AuthorFormContextProvider({ children }) {
+  const { user } = useAuth();
+  const userId = user?.uid;
   const router = useRouter();
   const [data, setData] = useState({
     name: "",
@@ -33,7 +36,7 @@ export default function AuthorFormContextProvider({ children }) {
     setIsDone(false);
 
     try {
-      await createAuthor({ data, image });
+      await createAuthor({ userId,data, image });
       setIsDone(true);
       // Reset form after successful creation
       setData({ name: "", slug: "" });

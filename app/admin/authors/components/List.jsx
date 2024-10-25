@@ -1,6 +1,6 @@
 
 "use client";
-import { useAuthor } from "@/lib/firebase/author/read";
+import { useAuthor } from "@/lib/firebase/author/AuthorRead";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";

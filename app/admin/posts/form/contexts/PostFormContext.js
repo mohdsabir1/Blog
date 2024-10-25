@@ -1,13 +1,16 @@
 "use client";
 
-import { getPosts } from "@/lib/firebase/post/read";
-import { createPost, deletePost, updatePost } from "@/lib/firebase/post/write";
+import { useAuth } from "@/lib/context/AuthContext";
+import { getPosts } from "@/lib/firebase/post/PostRead";
+import { createPost, deletePost, updatePost } from "@/lib/firebase/post/PostWrite";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, createContext, useContext } from "react";
 
 const PostForm = createContext();
 
 export default function PostFormContext({ children }) {
+  const { user } = useAuth();
+  const userId = user?.uid;
   const router = useRouter();
   const [data, setData] = useState({
     name: "",
@@ -32,7 +35,7 @@ export default function PostFormContext({ children }) {
     setIsDone(false);
 
     try {
-      await createPost({ data, image });
+      await createPost({ userId,data, image });
       setIsDone(true);
       // Reset form after successful creation
       setData({ name: "", slug: "" });

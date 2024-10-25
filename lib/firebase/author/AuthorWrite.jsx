@@ -2,7 +2,7 @@ import { db, storage } from "@/lib/firebase";
 import { Timestamp, setDoc, doc, updateDoc, deleteDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-export const createAuthor = async ({ data, image }) => {
+export const createAuthor = async ({ userId,data, image }) => {
   if (!data?.name?.trim()) {
     throw new Error("Name is required");
   }
@@ -22,6 +22,7 @@ export const createAuthor = async ({ data, image }) => {
       ...data,
       id: id,
       photoURL: imageUrl,
+      userId,
       timestamp: Timestamp.now(),
     });
   } catch (error) {
@@ -29,7 +30,7 @@ export const createAuthor = async ({ data, image }) => {
   }
 };
 
-export const updateAuthor = async ({ data, image }) => {
+export const updateAuthor = async ({ userId,data, image }) => {
   if (!data?.name?.trim()) {
     throw new Error("Name is required");
   }

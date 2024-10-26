@@ -23,9 +23,15 @@ const links = [
 ];
 
 export default function Sidebar() {
+
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { handleLogout } = useAuth(true);
+  const {user} = useAuth()
+  const userName = user.displayName
+  const icon  = user.photoURL
+  console.log(userName)
+  console.log(user.photoURL)
   return (
     <>
       <button
@@ -73,8 +79,8 @@ export default function Sidebar() {
                   </li>
                 );
               })}
-              <li>
-                {" "}
+              <li className="bg-gray-700 p-2 flex  flex-col">
+                
                 <button
                   className=" flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors duration-200 hover:bg-gray-700"
                   onClick={() => {
@@ -83,7 +89,13 @@ export default function Sidebar() {
                 >
                   Logout
                 </button>
+                <p>{userName}</p>
               </li>
+
+              {/* <li>
+                <img  src={icon} alt={user.displayName}/>
+              
+              </li> */}
             </ul>
           </nav>
         </div>

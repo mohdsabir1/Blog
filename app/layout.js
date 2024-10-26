@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./components/Header/Header";
 import AuthContextProvider from "@/lib/context/AuthContext";
+import Footer from "./components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
         <AuthContextProvider>
         <Header />
         {children}
+        <Footer />
         </AuthContextProvider>
       
       </body>

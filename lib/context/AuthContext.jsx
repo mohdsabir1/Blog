@@ -71,7 +71,10 @@ export default function AuthContextProvider({ children }) {
     try {
       await signOut(auth);
       setUser(null);
-      router.push('/'); // Redirect to / after logout
+      setTimeout(()=>{
+        router.push('/');
+      },2000)
+     // Redirect to / after logout
     } catch (error) {
       setError(error?.message);
     }

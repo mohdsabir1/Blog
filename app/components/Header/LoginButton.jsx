@@ -7,7 +7,7 @@ export default function LoginButton() {
   const { user, isLoading, error, handleSignIn, handleLogout } = useAuth();
 
   if (isLoading) {
-    return <h1>Loading</h1>;
+    return <h1><span className="loading loading-spinner loading-xs"></span></h1>;
   }
   if (user) {
     return (

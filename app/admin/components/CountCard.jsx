@@ -4,7 +4,7 @@ import React from "react";
 
 export default function CountCard({ userId,path, name, icon }) {
   const { data, error, isLoading } = useCollectionCount({ userId, path, name, icon });
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p><div className="skeleton h-12 w-32"></div></p>;
   if (error) return <p>Error...</p>;
 
   return (

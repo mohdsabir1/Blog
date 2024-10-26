@@ -15,7 +15,7 @@ export default async function CatPage({ params }) {
         <CategoryCard categoryId={categoryId} />
       </div>
 
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
         {posts.map((post, key) => {
           return <PostCard post={post} key={key} />;
         })}

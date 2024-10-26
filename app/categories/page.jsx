@@ -1,8 +1,20 @@
+'use client'
 import { getAllCategories } from "@/lib/firebase/category/readToShowFronend";
-import React from "react";
+import React,{useState,useEffect} from "react";
 import Link from "next/link";
-export default async function CategoriesPage() {
-  const categories = await getAllCategories();
+export default  function CategoriesPage() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    // Start listening to real-time updates
+    const unsubscribe = getAllCategories((newCategories) => {
+      setCategories(newCategories); // Update state with the latest categories
+    });
+
+    // Clean up the listener when the component unmounts
+    return () => unsubscribe();
+  }, []);
+  // const categories = await getAllCategories();
   console.log("the categories", categories);
 
   return (

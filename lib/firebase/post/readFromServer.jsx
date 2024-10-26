@@ -6,13 +6,23 @@ import {
   doc,
   query,
   where,
+  onSnapshot 
 } from "firebase/firestore";
 
-export const getALlPost = async () => {
-  return getDocs(collection(db, "posts")).then((snaps) =>
-    snaps.docs.map((d) => d.data())
-  );
-};
+export const getALlPost = (callback) => {
+  const postCollection = collection(db, "posts");
+
+  // Set up a real-time listener using onSnapshot
+  return onSnapshot(postCollection, (snapshot) => {
+    const posts = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    callback(posts); // Call the callback with the updated posts data
+  }, (error) => {
+    console.error("Error listening to posts:", error);
+  });
+};;
 
 export const getPost = async (id) => {
   return await getDoc(doc(db, `posts/${id}`)).then((snap) => snap.data());

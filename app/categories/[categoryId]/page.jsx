@@ -7,6 +7,8 @@ import React from "react";
 export default async function CatPage({ params }) {
   const { categoryId } = params;
   const posts = await getALlPostByCategory(categoryId);
+  console.log("the post on category" + posts)
+  // return
   if(posts.length == "")  return <p>No post from this this category</p>
   return (
     <section className="p-5">

@@ -23,7 +23,7 @@ export default async function PostDetails({ params }) {
   const post = await getPost(postId);
   return (
     <main >
-    <section className="px-24 py-10 flex flex-col gap-3 max-w-[750px] mx-auto">
+    <section className="px-5 md:px-10 py-10 flex flex-col gap-3 w-full md:max-w-[90%] mx-auto">
     <CategoryCard categoryId={post.categoryId} />
       <h1 className="tex-3xl font-bold">{post.name}</h1>
 
